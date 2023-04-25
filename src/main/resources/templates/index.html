@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Books</title>
+    <link th:rel="stylesheet" th:href="@{/css/bootstrap.min.css} ">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div>
+            <h1 class="text-center fw-light">All Books</h1>
+        </div>
+        <div>
+            <table class="table">
+                <thead class="table-secondary">
+                <tr>
+                    <th>Author</th>
+                    <th>Title</th>
+                    <th>Genre</th>
+                    <th>Volume</th>
+                    <th>Price</th>
+                    <th>Created</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.author}">Book's author</td>
+                    <td th:text="${book.title}">Book's title</td>
+                    <td th:text="${book.genre}">Book's genre</td>
+                    <td th:text="${book.volume}">Book's volume</td>
+                    <td th:text="${book.price} + ' ' + '$'">Book's price</td>
+                    <td th:text="${book.descriptionDTO.createdDate}"></td>
+                    <td>
+                        <a class="btn btn-primary" th:href="@{/edit/{id} (id=${book.id})}">Edit</a>
+                        <a class="btn btn-danger" th:href="@{/delete/{id}(id=${book.id})}">Delete</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+       <div class="btn btn-outline-secondary">
+           <a th:href="@{/create}" class="btn">Add new book</a>
+       </div>
+
+        <div class="btn btn-outline-secondary">
+            <a th:href="@{/excel/download}" class="btn">Download to excel</a>
+        </div>
+
+        <nav aria-label="Page navigation example">
+            <div>
+                <p style="font-weight: bold">Total pages: <span style="color: #051b11" th:text="${totalPage}"></span></p>
+                <p style="font-weight: bold">Total elements: <span style="color: #051b11" th:text="${totalElements}"></span></p>
+            </div>
+            <ul class="pagination">
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage > 1}" th:href="@{/index(page=${currentPage - 1})}">Previous</a>
+                    <span class="page-link" th:unless="${currentPage > 1}">Previous</span>
+                </li>
+
+                <li th:each="page : ${#numbers.sequence(1, totalPage)}" class="page-item">
+                    <a class="page-link" th:if="${page!=currentPage}" th:href="@{/index(page=${page})}" th:text="${page}"></a>
+                    <span class="page-link" th:unless="${page!=currentPage}" th:text="${page}"></span>
+                </li>
+
+                <li class="page-item">
+                    <a class="page-link" th:if="${currentPage < totalPage}" th:href="@{/index(page=${currentPage + 1})}">Next</a>
+                    <span class="page-link" th:unless="${currentPage < totalPage}">Next</span>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</body>
+</html>
